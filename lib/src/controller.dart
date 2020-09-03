@@ -686,5 +686,8 @@ class MapboxMapController extends ChangeNotifier {
     return MapboxGlPlatform.getInstance(_id).toLatLng(screenLocation);
   }
 
-  
+  /// Adds an image source to the style currently displayed in the map, so that it can later be referred to by the provided name.
+  Future<void> addSource(String name, Uint8List bytes, LatLngQuad coordinates) {
+    return MapboxGlPlatform.getInstance(_id).addSource(name, bytes, coordinates);
+  }
 }

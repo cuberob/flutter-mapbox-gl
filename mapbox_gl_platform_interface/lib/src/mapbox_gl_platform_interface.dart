@@ -111,7 +111,7 @@ abstract class MapboxGlPlatform {
   Future<bool> getTelemetryEnabled() async {
     throw UnimplementedError('getTelemetryEnabled() has not been implemented.');
   }
-  
+
   Future<List<Symbol>> addSymbols(List<SymbolOptions> options, [List<Map> data]) async {
     throw UnimplementedError('addSymbols() has not been implemented.');
   }
@@ -219,5 +219,10 @@ abstract class MapboxGlPlatform {
   Future<LatLng> toLatLng(Point screenLocation) async{
       throw UnimplementedError(
         'toLatLng() has not been implemented.');
+  }
+
+  Future<void> addSource(String name, Uint8List bytes,
+      LatLngQuad coordinates) async {
+    throw UnimplementedError('addSource() has not been implemented.');
   }
 }
