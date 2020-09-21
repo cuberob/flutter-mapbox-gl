@@ -408,7 +408,7 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
         case "style#removeImageSource":
             guard let arguments = methodCall.arguments as? [String: Any] else { return }
             guard let name = arguments["name"] as? String else { return }
-            guard let source = self.mapView.style?.source(withIdentifier: name) else { return }
+            guard let source = self.mapView.style?.source(withIdentifier:  name) else { return }
             self.mapView.style?.removeSource(source)
             result(nil)
         case "style#addLayer":
@@ -418,7 +418,14 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
             
             guard let source = self.mapView.style?.source(withIdentifier: sourceId) else { return }
             let layer = MGLRasterStyleLayer(identifier: name, source: source)
-            self.mapView.style?.addLayer(layer)
+            
+            if let countryLayer = self.mapView.style?.layer(withIdentifier: "country-label") {
+                self.mapView.style?.insertLayer(layer, below: countryLayer)
+            }
+            else {
+                self.mapView.style?.addLayer(layer)
+            }
+            
             result(nil)
         case "style#removeLayer":
             guard let arguments = methodCall.arguments as? [String: Any] else { return }
