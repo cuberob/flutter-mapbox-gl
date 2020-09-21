@@ -378,7 +378,7 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
             //guard let length = arguments["length"] as? NSNumber else { return }
             guard let bytes = arguments["bytes"] as? FlutterStandardTypedData else { return }
             guard let sdf = arguments["sdf"] as? Bool else { return }
-            guard let data = bytes.data as? Data else{ return }
+            guard let data = bytes.data as? Data else { return }
             guard let image = UIImage(data: data) else { return }
             if (sdf) {
                 self.mapView.style?.setImage(image.withRenderingMode(.alwaysTemplate), forName: name)
@@ -401,6 +401,12 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
                 topRight: CLLocationCoordinate2D(latitude: coordinates[1][0], longitude: coordinates[1][1])
             )
             
+            //Source duplicate check
+            if (self.mapView.style?.source(withIdentifier:  name)) != nil {
+                result(FlutterError(code: "duplicateSource", message: "Source with name \(name) already exists", details: "Can't add duplicate source with name: \(name)" ))
+                return
+            }
+            
             let source = MGLImageSource(identifier: name, coordinateQuad: quad, image: image)
             self.mapView.style?.addSource(source)
             
@@ -408,21 +414,31 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
         case "style#removeImageSource":
             guard let arguments = methodCall.arguments as? [String: Any] else { return }
             guard let name = arguments["name"] as? String else { return }
-            guard let source = self.mapView.style?.source(withIdentifier:  name) else { return }
-            self.mapView.style?.removeSource(source)
+            if let source = self.mapView.style?.source(withIdentifier:  name) {
+                self.mapView.style?.removeSource(source)
+            }
             result(nil)
         case "style#addLayer":
             guard let arguments = methodCall.arguments as? [String: Any] else { return }
             guard let name = arguments["name"] as? String else { return }
             guard let sourceId = arguments["sourceId"] as? String else { return }
             
-            guard let source = self.mapView.style?.source(withIdentifier: sourceId) else { return }
+            if (self.mapView.style?.layer(withIdentifier: name)) != nil {
+                result(FlutterError(code: "duplicateLayer", message: "Layer already exists", details: "Can't add duplicate layer with name: \(name)" ))
+                return
+            }
+            
+            guard let source = self.mapView.style?.source(withIdentifier: sourceId) else {
+                result(FlutterError(code: "noSuchSource", message: "No source found with name \(sourceId)", details: "Can't add add layer for source \(name), as the source does not exist." ))
+                return
+            }
+            
             let layer = MGLRasterStyleLayer(identifier: name, source: source)
             
+            //Attempt to insert the source underneath the country label, this way it also sits snug underneath the symbol layer.
             if let countryLayer = self.mapView.style?.layer(withIdentifier: "country-label") {
                 self.mapView.style?.insertLayer(layer, below: countryLayer)
-            }
-            else {
+            } else {
                 self.mapView.style?.addLayer(layer)
             }
             
@@ -430,8 +446,9 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
         case "style#removeLayer":
             guard let arguments = methodCall.arguments as? [String: Any] else { return }
             guard let name = arguments["name"] as? String else { return }
-            guard let layer = self.mapView.style?.layer(withIdentifier: name) else { return }
-            self.mapView.style?.removeLayer(layer)
+            if let layer = self.mapView.style?.layer(withIdentifier: name) {
+                self.mapView.style?.removeLayer(layer)
+            }
             result(nil)
         default:
             result(FlutterMethodNotImplemented)
