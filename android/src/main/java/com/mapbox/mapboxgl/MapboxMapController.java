@@ -70,6 +70,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.platform.PlatformView;
+import timber.log.Timber;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -84,6 +85,7 @@ import static com.mapbox.mapboxgl.MapboxMapsPlugin.STARTED;
 import static com.mapbox.mapboxgl.MapboxMapsPlugin.STOPPED;
 
 import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.sources.ImageSource;
 
@@ -157,6 +159,7 @@ final class MapboxMapController
       new MethodChannel(registrar.messenger(), "plugins.flutter.io/mapbox_maps_" + id);
     methodChannel.setMethodCallHandler(this);
     this.registrarActivityHashCode = registrar.activity().hashCode();
+    Timber.plant(new Timber.DebugTree());
   }
 
   private static String getAccessToken(@NonNull Context context) {
@@ -781,7 +784,7 @@ final class MapboxMapController
         if (style == null) {
           result.error("STYLE IS NULL", "The style is null. Has onStyleLoaded() already been invoked?", null);
         }
-        style.addLayer(new RasterLayer(call.argument("name"), call.argument("sourceId")));
+        style.addLayerBelow(new RasterLayer(call.argument("name"), call.argument("sourceId")), "country-label");
         result.success(null);
         break;
       }
