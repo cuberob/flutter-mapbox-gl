@@ -10,12 +10,12 @@ dependencies:
     git:
       url: https://github.com/cuberob/flutter-mapbox-gl.git
       path: mapbox_gl_platform_interface
-      ref: image-source
+      ref: image-source-rebase
   mapbox_gl_web:
     git:
       url: https://github.com/cuberob/flutter-mapbox-gl.git
       path: mapbox_gl_web
-      ref: image-source
+      ref: image-source-rebase
 
 flutter:
   plugin:
