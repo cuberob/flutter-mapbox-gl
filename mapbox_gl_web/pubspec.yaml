@@ -17,10 +17,7 @@ dependencies:
     sdk: flutter
   meta: ^1.1.7
   mapbox_gl_platform_interface:
-    git:
-      url: https://github.com/cuberob/flutter-mapbox-gl.git
-      path: mapbox_gl_platform_interface
-      ref: image-source
+    path: ../mapbox_gl_platform_interface
   mapbox_gl_dart: ^0.1.5
   image: ^2.1.12
 
