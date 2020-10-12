@@ -1,3 +1,12 @@
+## NOTE:
+This is a local copy of the [flutter-mapbox-gl](https://github.com/tobrun/flutter-mapbox-gl), based on version 0.8.0.
+This fork adds basic support for adding ImageSource's to the mapbox map, as we need it to display the runway overlay
+and it isn't supported in the original library as of yet. The whole (edited) plugin is nested in our project to avoid
+relying on other git repositories and to make updating the functionality more straight forward and visible.
+Once the original plugin supports adding image sources I would recommend dropping this fork and falling back to the
+original plugin repository as published through pub.dev.
+
+
 # Flutter Mapbox GL
 
 > **Please note that this project is community driven and is not an official Mapbox product.** We welcome [feedback](https://github.com/tobrun/flutter-mapbox-gl/issues) and contributions.
