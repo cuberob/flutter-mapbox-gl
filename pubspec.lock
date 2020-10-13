@@ -85,20 +85,16 @@ packages:
     dependency: "direct main"
     description:
       path: mapbox_gl_platform_interface
-      ref: image-source
-      resolved-ref: d0907cae6c6c1c094b5dcf33d6d2de63d65ed8f9
-      url: "https://github.com/cuberob/flutter-mapbox-gl.git"
-    source: git
-    version: "0.7.0"
+      relative: true
+    source: path
+    version: "0.8.0"
   mapbox_gl_web:
     dependency: "direct main"
     description:
       path: mapbox_gl_web
-      ref: image-source
-      resolved-ref: d0907cae6c6c1c094b5dcf33d6d2de63d65ed8f9
-      url: "https://github.com/cuberob/flutter-mapbox-gl.git"
-    source: git
-    version: "0.7.0"
+      relative: true
+    source: path
+    version: "0.8.0"
   meta:
     dependency: transitive
     description:
